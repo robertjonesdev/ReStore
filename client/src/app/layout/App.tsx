@@ -1,36 +1,32 @@
-import { useEffect, useState } from "react";
+
 import Catalog from "../../features/catalog/Catalog";
-import { Product} from "../models/product"
-import { Typography } from "@mui/material"
-import SWR from "../../features/SWR";
+import { Container, CssBaseline } from "@mui/material"
+import Header from "./Header";
+import { Route, Switch } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
+import ProductDetails from "../../features/catalog/ProductDetails";
+import AboutPage from "../../features/about/AboutPage";
+import ContactPage from "../../features/contact/ContactPage";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    fetch('http://localhost:5000/api/products')
-    .then(response => response.json())
-    .then(data => setProducts(data))
-  }, []);
-
-  function addProduct() {
-    setProducts(prevState => [...prevState, 
-      {
-        id: prevState.length + 101,
-        name: 'product' + (prevState.length + 1),
-        price: 3000.00,
-        brand: 'some brand',
-        description: 'some description',
-        pictureUrl: 'http://picsum.photos/200'
-      }])
-  }
-
   return (
     <>
-      <Typography variant='h1'>Re-Store</Typography>
-      <Catalog products={products} addProduct={addProduct} />
-      <SWR />
+      <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
+      <CssBaseline />
+      <Header />
+      <Container>
+        <Switch>
+          <Route exact path={'/'} component={HomePage} />
+          <Route exact path={'/catalog'} component={Catalog} />
+          <Route path={'/catalog/:id'} component={ProductDetails} />
+          <Route path={'/about'} component={AboutPage} />
+          <Route path={'/contact'} component={ContactPage} />
+        </Switch>
+      </Container>
+
     </>
   );
 }

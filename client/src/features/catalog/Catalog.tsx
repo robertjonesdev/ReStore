@@ -1,17 +1,23 @@
 import { Product } from "../../app/models/product";
 import { Button } from "@mui/material";
 import ProductList from "./ProductList";
-interface Props {
-    products: Product[];
-    addProduct: () => void;
-}
+import { useEffect, useState } from "react";
+import agent from "../../app/api/agent";
 
-export default function Catalog({products,addProduct}: Props) {
 
+export default function Catalog() {
+
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+      agent.Catalog.list().then(products => setProducts(products));
+    }, []);
+
+  
     return (
         <>
             <ProductList products={products} />
-            <Button variant='contained' onClick={addProduct}>Add product</Button>
         </>
     )
 }
+
